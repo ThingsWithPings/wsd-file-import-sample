@@ -1,0 +1,94 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.1.2'
+	id 'io.spring.dependency-management' version '1.1.2'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+repositories {
+	mavenCentral()
+}
+sourceSets.main.java.srcDirs "src/generated-sources/java"
+sourceSets.main.resources.excludes = ['ceb.xsd']
+
+configurations {
+    jaxb
+}
+
+//tasks.register('jaxb') {
+//    System.setProperty('javax.xml.accessExternalSchema', 'all')
+//    def jaxbTargetDir = file("src/main/java")
+//    doLast {
+//        jaxbTargetDir.mkdirs()
+//        ant.taskdef(
+//                name: 'xjc',
+//                classname: 'com.sun.tools.xjc.XJCTask',
+//                classpath: configurations.jaxb.asPath
+//        )
+//        ant.jaxbTargetDir = jaxbTargetDir
+//        ant.xjc(
+//                destdir: '${jaxbTargetDir}',
+//                package: 'com.example.xmltest.wsd',
+//                schema: 'src/main/resources/xsd/acmt.023.001.02.xsd'
+//        )
+//    }
+//}
+
+tasks.register('jaxb') {
+    System.setProperty('javax.xml.accessExternalSchema', 'all')
+    def jaxbTargetDir = file("src/main/java")
+
+    def xsdFiles = [
+            'src/main/resources/xsd/acmt.023.001.02.xsd',
+            'src/main/resources/xsd/acmt.024.001.02.xsd',
+            'src/main/resources/xsd/camt.052.001.08.xsd'
+            // Add more XSD file paths here
+    ]
+
+    doLast {
+        jaxbTargetDir.mkdirs()
+        ant.taskdef(
+                name: 'xjc',
+                classname: 'com.sun.tools.xjc.XJCTask',
+                classpath: configurations.jaxb.asPath
+        )
+
+        ant.jaxbTargetDir = jaxbTargetDir
+
+        xsdFiles.each { xsdFile ->
+            ant.xjc(
+                    destdir: jaxbTargetDir,
+                    package: 'com.example.xmltest.wsd',
+                    schema: xsdFile
+            )
+        }
+    }
+}
+
+dependencies {
+	// Other dependencies
+
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	compileOnly 'javax.xml.bind:jaxb-api:2.3.1'
+	implementation 'org.glassfish.jaxb:jaxb-runtime'
+
+    jaxb "com.sun.xml.bind:jaxb-xjc:2.1.7"
+    jaxb "com.sun.xml.bind:jaxb-xjc:2.3.1"
+    jaxb "com.sun.xml.bind:jaxb-impl:2.3.1"
+    jaxb "javax.xml.bind:jaxb-api:2.3.1"
+    jaxb "org.glassfish.jaxb:jaxb-core:2.3.0.1"
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
