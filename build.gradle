@@ -21,36 +21,9 @@ configurations {
     jaxb
 }
 
-//tasks.register('jaxb') {
-//    System.setProperty('javax.xml.accessExternalSchema', 'all')
-//    def jaxbTargetDir = file("src/main/java")
-//    doLast {
-//        jaxbTargetDir.mkdirs()
-//        ant.taskdef(
-//                name: 'xjc',
-//                classname: 'com.sun.tools.xjc.XJCTask',
-//                classpath: configurations.jaxb.asPath
-//        )
-//        ant.jaxbTargetDir = jaxbTargetDir
-//        ant.xjc(
-//                destdir: '${jaxbTargetDir}',
-//                package: 'com.example.xmltest.wsd',
-//                schema: 'src/main/resources/xsd/acmt.023.001.02.xsd'
-//        )
-//    }
-//}
-
 tasks.register('jaxb') {
     System.setProperty('javax.xml.accessExternalSchema', 'all')
     def jaxbTargetDir = file("src/main/java")
-
-    def xsdFiles = [
-            'src/main/resources/xsd/acmt.023.001.02.xsd',
-            'src/main/resources/xsd/acmt.024.001.02.xsd',
-            'src/main/resources/xsd/camt.052.001.08.xsd'
-            // Add more XSD file paths here
-    ]
-
     doLast {
         jaxbTargetDir.mkdirs()
         ant.taskdef(
@@ -58,18 +31,55 @@ tasks.register('jaxb') {
                 classname: 'com.sun.tools.xjc.XJCTask',
                 classpath: configurations.jaxb.asPath
         )
-
         ant.jaxbTargetDir = jaxbTargetDir
-
-        xsdFiles.each { xsdFile ->
-            ant.xjc(
-                    destdir: jaxbTargetDir,
-                    package: 'com.example.xmltest.wsd',
-                    schema: xsdFile
-            )
-        }
+        ant.xjc(
+                destdir: '${jaxbTargetDir}',
+                package: 'com.example.xmltest.wsd.acmt',
+                schema: 'src/main/resources/xsd/acmt.023.001.02.xsd'
+        )
+        ant.xjc(
+                destdir: '${jaxbTargetDir}',
+                package: 'com.example.xmltest.wsd.acmt',
+                schema: 'src/main/resources/xsd/acmt.024.001.02.xsd'
+        )
+        ant.xjc(
+                destdir: '${jaxbTargetDir}',
+                package: 'com.example.xmltest.wsd.camt',
+                schema: 'src/main/resources/xsd/camt.052.001.08.xsd'
+        )
     }
 }
+
+//tasks.register('jaxb') {
+//    System.setProperty('javax.xml.accessExternalSchema', 'all')
+//    def jaxbTargetDir = file("src/main/java")
+//
+//    def xsdFiles = [
+//            'src/main/resources/xsd/acmt.023.001.02.xsd',
+//            'src/main/resources/xsd/acmt.024.001.02.xsd',
+//            'src/main/resources/xsd/camt.052.001.08.xsd'
+//            // Add more XSD file paths here
+//    ]
+//
+//    doLast {
+//        jaxbTargetDir.mkdirs()
+//        ant.taskdef(
+//                name: 'xjc',
+//                classname: 'com.sun.tools.xjc.XJCTask',
+//                classpath: configurations.jaxb.asPath
+//        )
+//
+//        ant.jaxbTargetDir = jaxbTargetDir
+//
+//        xsdFiles.each { xsdFile ->
+//            ant.xjc(
+//                    destdir: jaxbTargetDir,
+//                    package: 'com.example.xmltest.wsd',
+//                    schema: xsdFile
+//            )
+//        }
+//    }
+//}
 
 dependencies {
 	// Other dependencies
