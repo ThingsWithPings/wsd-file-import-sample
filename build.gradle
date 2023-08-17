@@ -14,8 +14,6 @@ java {
 repositories {
 	mavenCentral()
 }
-sourceSets.main.java.srcDirs "src/generated-sources/java"
-sourceSets.main.resources.excludes = ['ceb.xsd']
 
 configurations {
     jaxb
