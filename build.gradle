@@ -54,17 +54,17 @@ tasks.register('jaxb') {
         ant.jaxbTargetDir = jaxbTargetDir
         ant.xjc(
                 destdir: '${jaxbTargetDir}',
-                package: 'com.example.xmltest.wsd.acmt',
+                package: 'com.example.xmltest.xsd.acmt',
                 schema: 'src/main/resources/xsd/acmt.023.001.02.xsd'
         )
         ant.xjc(
                 destdir: '${jaxbTargetDir}',
-                package: 'com.example.xmltest.wsd.acmt',
+                package: 'com.example.xmltest.xsd.acmt',
                 schema: 'src/main/resources/xsd/acmt.024.001.02.xsd'
         )
         ant.xjc(
                 destdir: '${jaxbTargetDir}',
-                package: 'com.example.xmltest.wsd.camt',
+                package: 'com.example.xmltest.xsd.camt',
                 schema: 'src/main/resources/xsd/camt.052.001.08.xsd'
         )
     }
