@@ -41,9 +41,17 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+//ext {
+//    xsdPkgPath = 'com.example.xmltest.xsd'
+//    //xsdFilePath = 'src/main/resources/xsd/'
+//}
+
+
 tasks.register('jaxb') {
     System.setProperty('javax.xml.accessExternalSchema', 'all')
     def jaxbTargetDir = file("src/main/java")
+    def generatedXsdPkgPath = 'com.example.xmltest.xsd'
+    def xsdFilePath = 'src/main/resources/xsd/'
     doLast {
         jaxbTargetDir.mkdirs()
         ant.taskdef(
@@ -52,20 +60,22 @@ tasks.register('jaxb') {
                 classpath: configurations.jaxb.asPath
         )
         ant.jaxbTargetDir = jaxbTargetDir
+        ant.generatedXsdPkgPath = generatedXsdPkgPath
+        ant.xsdFilePath = xsdFilePath
         ant.xjc(
                 destdir: '${jaxbTargetDir}',
-                package: 'com.example.xmltest.xsd.acmt',
-                schema: 'src/main/resources/xsd/acmt.023.001.02.xsd'
+                package: '${generatedXsdPkgPath}.acmt',
+                schema: '${xsdFilePath}/acmt.023.001.02.xsd'
         )
         ant.xjc(
                 destdir: '${jaxbTargetDir}',
-                package: 'com.example.xmltest.xsd.acmt',
-                schema: 'src/main/resources/xsd/acmt.024.001.02.xsd'
+                package: '${generatedXsdPkgPath}.acmt',
+                schema: '${xsdFilePath}/acmt.024.001.02.xsd'
         )
         ant.xjc(
                 destdir: '${jaxbTargetDir}',
-                package: 'com.example.xmltest.xsd.camt',
-                schema: 'src/main/resources/xsd/camt.052.001.08.xsd'
+                package: '${generatedXsdPkgPath}.camt',
+                schema: '${xsdFilePath}/camt.052.001.08.xsd'
         )
     }
 }
