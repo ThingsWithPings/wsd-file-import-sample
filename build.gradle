@@ -41,12 +41,6 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-//ext {
-//    xsdPkgPath = 'com.example.xmltest.xsd'
-//    //xsdFilePath = 'src/main/resources/xsd/'
-//}
-
-
 tasks.register('jaxb') {
     System.setProperty('javax.xml.accessExternalSchema', 'all')
     def jaxbTargetDir = file("src/main/java")
